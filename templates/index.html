@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Price Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="page">
+        <nav class="nav">
+            <div class="brand"><span class="brand-icon">⌂</span> HomeValue <span class="tag">AI</span></div>
+            <span class="nav-note">Machine Learning Project</span>
+        </nav>
+
+        <section class="hero">
+            <div class="hero-copy">
+                <p class="eyebrow">SMART PROPERTY ESTIMATION</p>
+                <h1>Find out what<br><span>your home could be worth.</span></h1>
+                <p class="intro">Enter a few details about the area and get an estimated house price powered by a Linear Regression model.</p>
+                <div class="stats">
+                    <div><strong>5</strong><small>Input features</small></div>
+                    <div><strong>ML</strong><small>Prediction model</small></div>
+                    <div><strong>₹</strong><small>Price estimate</small></div>
+                </div>
+            </div>
+
+            <section class="form-card">
+                <div class="card-heading">
+                    <div>
+                        <p class="eyebrow">PREDICTION TOOL</p>
+                        <h2>Property details</h2>
+                    </div>
+                    <span class="house-icon">⌂</span>
+                </div>
+                <form method="POST">
+                    <label>Average area income</label>
+                    <input type="number" step="any" min="0" name="income" placeholder="e.g. 65000" value="{{ form_values.get('income', '') }}" required>
+
+                    <div class="two-col">
+                        <div>
+                            <label>Average house age</label>
+                            <input type="number" step="any" min="0" name="house_age" placeholder="e.g. 5.5" value="{{ form_values.get('house_age', '') }}" required>
+                        </div>
+                        <div>
+                            <label>Number of rooms</label>
+                            <input type="number" step="any" min="0" name="rooms" placeholder="e.g. 7" value="{{ form_values.get('rooms', '') }}" required>
+                        </div>
+                    </div>
+
+                    <div class="two-col">
+                        <div>
+                            <label>Number of bedrooms</label>
+                            <input type="number" step="any" min="0" name="bedrooms" placeholder="e.g. 4" value="{{ form_values.get('bedrooms', '') }}" required>
+                        </div>
+                        <div>
+                            <label>Area population</label>
+                            <input type="number" step="any" min="0" name="population" placeholder="e.g. 35000" value="{{ form_values.get('population', '') }}" required>
+                        </div>
+                    </div>
+                    <button type="submit">Predict house price <span>→</span></button>
+                </form>
+
+                {% if prediction is not none %}
+                <div class="result">
+                    <span>ESTIMATED HOUSE PRICE</span>
+                    <strong>₹ {{ "{:,.2f}".format(prediction) }}</strong>
+                    <small>This is a model estimate, not a property valuation.</small>
+                </div>
+                {% endif %}
+                {% if error %}
+                <div class="error"><strong>Setup / prediction message:</strong> {{ error }}<br>Make sure <code>Housing.csv</code> is in the same folder as <code>app.py</code>.</div>
+                {% endif %}
+                {% if model_score is not none %}
+                <p class="model-score">Model test R² score: <strong>{{ "%.3f"|format(model_score) }}</strong></p>
+                {% endif %}
+            </section>
+        </section>
+        <footer>House Price Prediction • Built with Python, Flask &amp; Scikit-learn</footer>
+    </main>
+</body>
+</html>
