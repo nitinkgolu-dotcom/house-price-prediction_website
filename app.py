@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -5,6 +6,8 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 
 app = Flask(__name__)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CSV_PATH = os.path.join(BASE_DIR, "Housing.csv")
 
 model = None
 model_score = None
@@ -13,7 +16,7 @@ error_message = None
 def train_model():
     global model, model_score, error_message
     try:
-        df = pd.read_csv("Housing.csv")
+        df = pd.read_csv(CSV_PATH)
         if "Address" in df.columns:
             df = df.drop("Address", axis=1)
 
